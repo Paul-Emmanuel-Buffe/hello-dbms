@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from db_connection import fetch_all
 
 def created_app():
 # appli Flask
@@ -7,7 +8,22 @@ def created_app():
     #Routes
     @app.route("/")
     def index():
-        return render_template("index.html")
+        query="""
+                SELECT * FROM (
+                            SELECT *
+                            FROM original_raw
+                            LIMIT 5
+                        )
+                UNION ALL
+                SELECT * FROM (
+                    SELECT *
+                    FROM original_raw
+                    LIMIT 7 OFFSET (SELECT COUNT(*) -10 FROM original_raw)
+                )
+            """
+
+        data = fetch_all(query)
+        return render_template("index.html", data=data)
 
     @app.route("/observations")
     def observations():
@@ -20,6 +36,7 @@ def created_app():
     @app.route("/methodologie")
     def methodologie():
         return render_template("methodologie.html")
+
     
     
     return app

@@ -33,7 +33,7 @@
             <h1>Production électrique mondiale et impacts carbone</h1>
             <p class="text-muted">
                 Analyse des émissions de CO₂ liées aux différentes sources de production
-                d’électricité à l’échelle mondiale.
+                d'électricité à l'échelle mondiale.
             </p>
 
             <!-- Card : Contexte du projet -->
@@ -43,14 +43,14 @@
                 </div>
                 <div class="card-body">
                     <p>
-                        Ce projet vise à analyser l’impact carbone de la production
-                        d’électricité à partir de différentes sources énergétiques
+                        Ce projet vise à analyser l'impact carbone de la production
+                        d'électricité à partir de différentes sources énergétiques
                         (charbon, gaz naturel, pétrole, hydroélectricité, renouvelables
                         et nucléaire).
                     </p>
                     <p>
-                        L’objectif est de quantifier la contribution de chaque source
-                        aux émissions totales de CO₂ pour différents pays, puis d’estimer
+                        L'objectif est de quantifier la contribution de chaque source
+                        aux émissions totales de CO₂ pour différents pays, puis d'estimer
                         les émissions annuelles associées à leur consommation électrique.
                     </p>
                 </div>
@@ -64,7 +64,7 @@
                 <div class="card-body">
                     <ul>
                         <li>Données de production électrique par pays</li>
-                        <li>Facteurs d’émission (gCO₂/kWh) issus du GIEC (2014)</li>
+                        <li>Facteurs d'émission (gCO₂/kWh) issus du GIEC (2014)</li>
                         <li>Utilisation des valeurs médianes pour les calculs</li>
                     </ul>
                 </div>
@@ -76,14 +76,51 @@
                     Aperçu du jeu de données CarbonFootprint mis à disposition
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">
-                        Exemple des premières lignes du jeu de données utilisé pour l’analyse.
-                    </p>
-                    <div style="height: 220px; background-color: #e9ecef; border-radius: 4px;">
-                        <!-- Tableau à venir -->
+                    <div style="max-height: 400px; overflow-y: auto; overflow-x: auto; border: 1px solid #dee2e6; border-radius: 4px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa; position: sticky; top: 0; z-index: 10;">
+                                    {% for column in data[0].keys() %}
+                                        {% if loop.index == 1 %}
+                                            <th style="padding: 10px 16px; text-align: left; vertical-align: middle; white-space: nowrap; font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6;">
+                                                {{ column | replace('_', ' ') | title }}
+                                            </th>
+                                        {% else %}
+                                            <th style="padding: 10px 16px; text-align: right; vertical-align: middle; white-space: nowrap; font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6;">
+                                                {{ column | replace('_', ' ') | title }}
+                                            </th>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                    <tr style="border-bottom: 1px solid #dee2e6;" 
+                                        onmouseover="this.style.backgroundColor='#f8f9fa'" 
+                                        onmouseout="this.style.backgroundColor=''">
+                                        {% for key, value in row.items() %}
+                                            {% if loop.index == 1 %}
+                                                <td style="padding: 10px 16px; vertical-align: middle; white-space: nowrap; font-weight: 600; color: #212529;">
+                                                    {{ value }}
+                                                </td>
+                                            {% else %}
+                                                <td style="padding: 10px 16px; vertical-align: middle; text-align: right; color: #6c757d;">
+                                                    {% if value is number %}
+                                                        {{ "%.1f" | format(value) }}
+                                                    {% else %}
+                                                        {{ value }}
+                                                    {% endif %}
+                                                </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
 
         </div>
     </body>
