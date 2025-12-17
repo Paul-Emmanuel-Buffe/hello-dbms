@@ -10,6 +10,9 @@
 
     <!-- CSS commun -->
     <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+
+    <!-- Import de plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 </head>
 
 <body>
@@ -27,10 +30,24 @@
         </div>
     </nav>
 
-    <!-- Contenu -->
+    <div class="card">
+    <div class="card-header">
+        Répartition mondiale des sources d'énergie
+    </div>
+    <div class="card-body">
+        <p class="text-muted">
+            Aperçu de la contribution de chaque type de ressource à la production électrique mondiale.
+        </p>
+        <!-- Graph Plotly -->
+        {{ graph | safe }}
+    </div>
+</div>
+
+
+    <!-- Contenu
     <div class="container">
         <h1>Observations</h1>
-    </div>
+    </div> -->
 
 </body>
 </html>
