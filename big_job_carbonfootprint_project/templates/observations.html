@@ -67,7 +67,8 @@
             <div class="card-body">
                 <div style="display: flex; gap: 20px;">
                     <div id="graph-5" style="flex: 1;"></div>
-                    <!-- <div id="graph-2" style="flex: 1;"></div> -->
+                    <div id="graph-6" style="flex: 1;"></div>
+                    <div id="graph-7" style="flex: 1;"></div>
                 </div>
             </div>
         </div>
@@ -78,6 +79,9 @@
         const figBar = {{ graph_bar | safe }};
         const fig4 = {{ graph_4 | safe }};
         const fig5 = {{ graph_5 | safe }};
+        const fig6 = {{ graph_6 | safe }};
+        const fig7 = {{ graph_7 | safe }};
+
 
         fig1.layout.height = 400;
         fig2.layout.height = 400;
@@ -87,6 +91,8 @@
         Plotly.newPlot('graph-3', figBar.data, figBar.layout, {responsive: true});
         Plotly.newPlot('graph-4', fig4.data, fig4.layout, {responsive: true}); 
         Plotly.newPlot('graph-5', fig5.data, fig5.layout, {responsive: true});
+        Plotly.newPlot('graph-6', fig6.data, fig6.layout, {responsive: true});
+        Plotly.newPlot('graph-7', fig7.data, fig7.layout, {responsive: true});
     </script>
 
 </body>
