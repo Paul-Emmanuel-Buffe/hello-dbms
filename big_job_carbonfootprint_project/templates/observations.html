@@ -51,12 +51,20 @@
                 <div id="graph-3" style="width: 1000px; height: 500px;"></div>
             </div>
         </div>
+        <div class="card">
+        <div class="card-header">
+            Sources d’énergie par pays – Top 5 consommateurs mondiaux d'électricité
+        </div>
+        <div class="card-body" style="display: flex; justify-content: center;">
+            <div id="graph-4" style="width: 1000px; height: 500px;"></div>
+        </div>
     </div>
 
     <script>
         const fig1 = {{ graph | safe }};
         const fig2 = {{ graph_2 | safe }};
         const figBar = {{ graph_bar | safe }};
+        const fig4 = {{ graph_4 | safe }};  // <- nouveau graph
 
         fig1.layout.height = 400;
         fig2.layout.height = 400;
@@ -64,6 +72,7 @@
         Plotly.newPlot('graph-1', fig1.data, fig1.layout, {responsive: true});
         Plotly.newPlot('graph-2', fig2.data, fig2.layout, {responsive: true});
         Plotly.newPlot('graph-3', figBar.data, figBar.layout, {responsive: true});
+        Plotly.newPlot('graph-4', fig4.data, fig4.layout, {responsive: true});  // <- rendu du nouveau graph
     </script>
 
 </body>
