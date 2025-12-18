@@ -30,22 +30,41 @@
         </div>
     </nav>
 
-    <div class="card">
-    <div class="card-header">
-        Répartition mondiale des sources d'énergie
-    </div>
-    <div class="card-body">
-
-        <!-- Graph Plotly -->
-        {{ graph | safe }}
-    </div>
-</div>
-
-
-    <!-- Contenu
     <div class="container">
-        <h1>Observations</h1>
-    </div> -->
+        <div class="card">
+            <div class="card-header">
+                Production électrique mondiale
+            </div>
+            <div class="card-body">
+                <div style="display: flex; gap: 20px;">
+                    <div id="graph-1" style="flex: 1;"></div>
+                    <div id="graph-2" style="flex: 1;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Répartition des énergies fossiles et bas-carbone par région (%)
+            </div>
+                <div class="card-body" style="display: flex; justify-content: center;">
+                <div id="graph-3" style="width: 1000px; height: 500px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fig1 = {{ graph | safe }};
+        const fig2 = {{ graph_2 | safe }};
+        const figBar = {{ graph_bar | safe }};
+
+        fig1.layout.height = 400;
+        fig2.layout.height = 400;
+
+        Plotly.newPlot('graph-1', fig1.data, fig1.layout, {responsive: true});
+        Plotly.newPlot('graph-2', fig2.data, fig2.layout, {responsive: true});
+        Plotly.newPlot('graph-3', figBar.data, figBar.layout, {responsive: true});
+    </script>
 
 </body>
 </html>
