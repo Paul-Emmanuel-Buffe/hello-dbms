@@ -9,22 +9,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- CSS commun -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=3">
 </head>
 
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">CarbonFootprint Project</div>
-            <ul class="navbar-menu">
-                <li><a href="/">Accueil</a></li>
-                <li><a href="/observations">Observations</a></li>
-                <li><a href="/analyse" class="active">Analyse par pays</a></li>
-                <li><a href="/methodologie">Méthodologie</a></li>
-            </ul>
+    <nav class="navbar sidebar">
+        <div class="navbar-brand">
+            CarbonFootprint Project
         </div>
+
+        <ul class="navbar-menu">
+            <li>
+                <a href="/" title="Présentation du projet">
+                    Présentation
+                </a>
+            </li>
+
+            <li>
+                <a href="/observations" title="Analyses et constats">
+                    Observations
+                </a>
+            </li>
+
+            <li class="separator"></li>
+
+            <li>
+                <a href="/analyse" title="Simulation CO₂"> 
+                    Calculateur CO₂
+                </a>
+            </li>
+
+            <li class="separator"></li>
+
+            <li>
+                <a href="/methodologie" class="active"title="Sources et hypothèses">
+                    Méthodologie
+                </a>
+            </li>
+        </ul>
     </nav>
 
     <!-- Contenu -->
