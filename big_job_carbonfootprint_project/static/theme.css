@@ -46,69 +46,113 @@
 
     h1 {
         font-size: 1.9rem;
+        text-align: center;
     }
 
     h2 {
         font-size: 1.4rem;
     }
 
-    /* ===============================
-       NAVBAR — identité forte
-       =============================== */
-    .navbar {
-        background: linear-gradient(
-            90deg,
-            var(--energy-blue-dark),
-            var(--energy-blue)
-        );
-        padding: 14px 0;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-    }
+nav.navbar.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: linear-gradient(180deg, #F1F4FA 0%, #E4E9F3 100%);
+    padding: 20px 14px;
+    box-shadow: 4px 0 16px rgba(15, 42, 68, 0.12);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    border-radius: 0 14px 14px 0;
+}
 
-    .navbar-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+nav.navbar.sidebar .navbar-brand {
+    color: var(--energy-blue-dark);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 36px;
+    padding: 0 6px;
+    letter-spacing: 0.3px;
+}
 
-    .navbar-brand {
-        font-family: 'Roboto Slab', serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #FFFFFF;
-        letter-spacing: 0.5px;
-    }
+nav.navbar.sidebar .navbar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-    .navbar-menu {
-        list-style: none;
-        display: flex;
-        gap: 28px;
-        margin: 0;
-        padding: 0;
-    }
+nav.navbar.sidebar .navbar-menu li {
+    margin: 0;
+}
 
-    .navbar-menu li a {
-        text-decoration: none;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #D1D5DB;
-        padding-bottom: 6px;
-        border-bottom: 2px solid transparent;
-        transition: all 0.2s ease;
-    }
+nav.navbar.sidebar .navbar-menu li.separator {
+    height: 1px;
+    background-color: rgba(15, 42, 68, 0.12);
+    margin: 10px 6px;
+}
 
-    .navbar-menu li a:hover {
-        color: #FFFFFF;
-        border-bottom-color: var(--energy-green);
-    }
+nav.navbar.sidebar .navbar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: var(--text-main);
+    background-color: rgba(30, 64, 175, 0.05);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1px solid rgba(30, 64, 175, 0.08);
+    cursor: pointer;
+    position: relative;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
 
-    .navbar-menu li a.active {
-        color: #FFFFFF;
-        border-bottom-color: var(--energy-green);
-    }
+nav.navbar.sidebar .navbar-menu li a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--energy-blue);
+    border-radius: 2px;
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+}
+
+nav.navbar.sidebar .navbar-menu li a:hover {
+    background-color: rgba(30, 64, 175, 0.12);
+    color: var(--energy-blue-dark);
+    border-color: rgba(30, 64, 175, 0.25);
+    transform: translateX(3px);
+    box-shadow: 0 3px 10px rgba(15, 42, 68, 0.15);
+}
+
+nav.navbar.sidebar .navbar-menu li a.active {
+    background-color: var(--energy-blue);
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: var(--energy-blue);
+    transform: translateX(3px);
+    box-shadow: 0 4px 14px rgba(30, 64, 175, 0.35);
+}
+
+nav.navbar.sidebar .navbar-menu li a.active::before {
+    transform: scaleY(1);
+}
+
+.container {
+    margin-left: 240px;
+}
 
     /* ===============================
        CARDS — structure data
