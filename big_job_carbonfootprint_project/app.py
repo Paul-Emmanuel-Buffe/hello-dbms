@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from db_connection import fetch_all
 import plotly.graph_objs as go
 import plotly.offline as pyo
@@ -456,8 +456,48 @@ def created_app():
 
     @app.route("/analyse")
     def analyse():
-        return render_template("analyse.html")
 
+        # Exemple minimal
+        selected_country = request.args.get('country', 'world')
+
+        # Liste des pays
+        countries_query = "SELECT DISTINCT country FROM country ORDER BY country"
+        countries_data = fetch_all(countries_query)
+        # Affichage avec la première lettre en majuscule
+        countries = [row['country'].capitalize() for row in countries_data]
+
+        # Conversion en minuscules pour la requête SQL
+        country_sql = selected_country.lower()
+        # Données du pays sélectionné
+        query = f"""
+            SELECT gas AS "Gaz", oil AS "Pétrole", coal AS "Charbon",
+                nuclear AS "Nucléaire", hydro AS "Hydro", renewable AS "Renouvelables"
+            FROM country
+            WHERE country = '{country_sql}'
+        """
+        data = fetch_all(query)
+
+        data = fetch_all(query)
+        columns = ["Gaz", "Pétrole", "Charbon", "Nucléaire", "Hydro", "Renouvelables"]
+
+        if data:
+            values = [data[0][col] for col in columns]
+        else:
+            values = [0] * len(columns)  # placeholder
+
+
+        fig = go.Figure(data=[go.Pie(labels=columns, values=values)])
+        fig.update_layout(title_text=f"Mix énergétique : {selected_country.capitalize()}")
+
+        graph = fig.to_json()  # ← Important
+
+
+        return render_template(
+            "analyse.html",
+            graph=graph,
+            countries=countries,
+            selected_country=selected_country
+        )
     @app.route("/methodologie")
     def methodologie():
         return render_template("methodologie.html")

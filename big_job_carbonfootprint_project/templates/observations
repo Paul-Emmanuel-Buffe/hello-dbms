@@ -1,0 +1,10 @@
+<form method="get">
+    <label for="country">Choisir un pays :</label>
+    <input list="countries" name="country" id="country" placeholder="Tapez la première lettre...">
+    <datalist id="countries">
+        {% for c in countries %}
+            <option value="{{ c }}">
+        {% endfor %}
+    </datalist>
+    <button type="submit">Afficher</button>
+</form>

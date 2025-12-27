@@ -8,9 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
 
-        <!-- CSS commun -->
+    <!-- CSS commun -->
     <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=3">
-</head>
+
+    </head>
 
 <body>
 
@@ -36,7 +37,7 @@
             <li class="separator"></li>
 
             <li>
-                <a href="/analyse"  class="active" title="Simulation CO₂"> 
+                <a href="/analyse" class="active" title="Simulation CO₂"> 
                     Calculateur CO₂
                 </a>
             </li>
@@ -53,7 +54,25 @@
 
     <!-- Contenu -->
     <div class="container">
-        <h1>Analyse</h1>
+        <h1>Calculateur des émissions de CO₂</h1>
+        <p>Ce calculateur estime la contribution de chaque source d'énergie aux émissions totales de CO₂ pour tous les pays, basé sur le GIEC (2014).</p>
+
+        <!-- Sélecteur de pays -->
+        <div class="filters">
+            <form method="get">
+                <label for="country">Choisir un pays :</label>
+                <input list="countries" name="country" id="country" placeholder="Tapez la première lettre...">
+                <datalist id="countries">
+                    {% for c in countries %}
+                        <option value="{{ c }}">
+                    {% endfor %}
+                </datalist>
+                <button type="submit">Afficher</button>
+            </form>
+        </div>
+
+        <!-- Visualisation principale -->
+        <div id="chart-container"></div>
     </div>
 
 </body>
