@@ -11,7 +11,9 @@
     <!-- CSS commun -->
     <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=3">
 
-    </head>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
 
 <body>
 
@@ -61,7 +63,7 @@
         <div class="filters">
             <form method="get">
                 <label for="country">Choisir un pays :</label>
-                <input list="countries" name="country" id="country" placeholder="Tapez la première lettre...">
+                <input list="countries" name="country" id="country" placeholder="Tapez la première lettre..." value="{{ selected_country or '' }}">
                 <datalist id="countries">
                     {% for c in countries %}
                         <option value="{{ c }}">
@@ -74,6 +76,16 @@
         <!-- Visualisation principale -->
         <div id="chart-container"></div>
     </div>
+
+    <!-- Script pour afficher le graphique -->
+    <script>
+        {% if graph %}
+            var graphData = {{ graph | safe }};
+            Plotly.newPlot('chart-container', graphData.data, graphData.layout);
+        {% else %}
+            document.getElementById('chart-container').innerHTML = '<p style="text-align:center; color:#666;">Aucune donnée à afficher</p>';
+        {% endif %}
+    </script>
 
 </body>
 </html>

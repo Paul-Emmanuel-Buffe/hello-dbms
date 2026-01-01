@@ -456,48 +456,75 @@ def created_app():
 
     @app.route("/analyse")
     def analyse():
+        selected_country = request.args.get('country', None)
 
-        # Exemple minimal
-        selected_country = request.args.get('country', 'world')
-
-        # Liste des pays
-        countries_query = "SELECT DISTINCT country FROM country ORDER BY country"
-        countries_data = fetch_all(countries_query)
-        # Affichage avec la première lettre en majuscule
+        countries_data = fetch_all("SELECT DISTINCT country FROM country ORDER BY country")
         countries = [row['country'].capitalize() for row in countries_data]
 
-        # Conversion en minuscules pour la requête SQL
-        country_sql = selected_country.lower()
-        # Données du pays sélectionné
+        where_clause = ""
+        if selected_country:
+            country_sql = selected_country.lower()
+            where_clause = f"WHERE LOWER(country) = '{country_sql}'"
+
+        # Requête modifiée pour agréger TOUS les pays si aucun n'est sélectionné
         query = f"""
-            SELECT gas AS "Gaz", oil AS "Pétrole", coal AS "Charbon",
-                nuclear AS "Nucléaire", hydro AS "Hydro", renewable AS "Renouvelables"
-            FROM country
-            WHERE country = '{country_sql}'
+            WITH emissions AS (
+                SELECT
+                    country,
+                    coal*820 AS coal_emission,
+                    gas*490 AS gas_emission,
+                    oil*740 AS oil_emission,
+                    nuclear*12 AS nuclear_emission,
+                    hydro*24 AS hydro_emission,
+                    renewable*41 AS renewable_emission
+                FROM country
+                {where_clause}
+            ),
+            totals AS (
+                SELECT
+                    SUM(coal_emission) AS coal_emission,
+                    SUM(gas_emission) AS gas_emission,
+                    SUM(oil_emission) AS oil_emission,
+                    SUM(nuclear_emission) AS nuclear_emission,
+                    SUM(hydro_emission) AS hydro_emission,
+                    SUM(renewable_emission) AS renewable_emission,
+                    SUM(coal_emission + gas_emission + oil_emission + nuclear_emission + hydro_emission + renewable_emission) AS total
+                FROM emissions
+            )
+            SELECT
+                ROUND(coal_emission/NULLIF(total,0)*100,2) AS coal_pct,
+                ROUND(gas_emission/NULLIF(total,0)*100,2) AS gas_pct,
+                ROUND(oil_emission/NULLIF(total,0)*100,2) AS oil_pct,
+                ROUND(nuclear_emission/NULLIF(total,0)*100,2) AS nuclear_pct,
+                ROUND(hydro_emission/NULLIF(total,0)*100,2) AS hydro_pct,
+                ROUND(renewable_emission/NULLIF(total,0)*100,2) AS renewable_pct
+            FROM totals;
         """
-        data = fetch_all(query)
 
         data = fetch_all(query)
-        columns = ["Gaz", "Pétrole", "Charbon", "Nucléaire", "Hydro", "Renouvelables"]
+        print("DATA:", data)  # <--- pour debug
+
+        columns = ["coal_pct","gas_pct","oil_pct","nuclear_pct","hydro_pct","renewable_pct"]
+        labels = ["Charbon","Gaz","Pétrole","Nucléaire","Hydro","Renouvelables"]
 
         if data:
-            values = [data[0][col] for col in columns]
+            values = [data[0][col] if data[0][col] is not None else 0 for col in columns]
+            country_label = selected_country.capitalize() if selected_country else "Tous les pays"
         else:
-            values = [0] * len(columns)  # placeholder
+            values = [0]*6
+            country_label = "Tous les pays"
 
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+        fig.update_layout(title_text=f"Mix énergétique : {country_label}")
 
-        fig = go.Figure(data=[go.Pie(labels=columns, values=values)])
-        fig.update_layout(title_text=f"Mix énergétique : {selected_country.capitalize()}")
+        graph = fig.to_json()
 
-        graph = fig.to_json()  # ← Important
+        return render_template("analyse.html",
+                            graph=graph,
+                            countries=countries,
+                            selected_country=selected_country)
 
-
-        return render_template(
-            "analyse.html",
-            graph=graph,
-            countries=countries,
-            selected_country=selected_country
-        )
+    
     @app.route("/methodologie")
     def methodologie():
         return render_template("methodologie.html")
