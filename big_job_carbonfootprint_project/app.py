@@ -458,7 +458,7 @@ def created_app():
     def analyse():
         selected_country = request.args.get('country', None)
 
-        countries_data = fetch_all("SELECT DISTINCT country FROM country ORDER BY country")
+        countries_data = fetch_all("SELECT DISTINCT country FROM original_raw ORDER BY country")
         countries = [row['country'].capitalize() for row in countries_data]
 
         where_clause = ""
@@ -477,7 +477,7 @@ def created_app():
                     nuclear*12 AS nuclear_emission,
                     hydro*24 AS hydro_emission,
                     renewable*41 AS renewable_emission
-                FROM country
+                FROM original_raw
                 {where_clause}
             ),
             totals AS (
@@ -502,7 +502,6 @@ def created_app():
         """
 
         data = fetch_all(query)
-        print("DATA:", data)  # <--- pour debug
 
         columns = ["coal_pct","gas_pct","oil_pct","nuclear_pct","hydro_pct","renewable_pct"]
         labels = ["Charbon","Gaz","Pétrole","Nucléaire","Hydro","Renouvelables"]
