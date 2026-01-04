@@ -1,5 +1,6 @@
 
-    /* ===============================
+   
+   /* ===============================
        CHARTE COULEUR — ENERGY & CARBON
        =============================== */
     :root {
@@ -270,3 +271,61 @@ input[list]:focus {
     background-color: var(--energy-blue-dark);
 }
 
+/* ===============================
+   TABLES — cohérence dashboard
+   =============================== */
+
+.table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 100%;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background-color: #FFFFFF;
+}
+
+/* table principale */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 0.9rem;
+}
+
+/* header */
+.data-table thead th {
+    background-color: var(--energy-blue-light);
+    color: var(--energy-blue-dark);
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+/* cellules */
+.data-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-muted);
+    vertical-align: middle;
+}
+
+/* première colonne (pays / ressource) */
+.data-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-main);
+    text-align: left;
+}
+
+/* colonnes numériques */
+.data-table tbody td:not(:first-child),
+.data-table thead th:not(:first-child) {
+    text-align: right;
+}
+
+/* hover ligne */
+.data-table tbody tr:hover {
+    background-color: rgba(30, 64, 175, 0.06);
+}

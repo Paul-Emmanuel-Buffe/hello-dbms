@@ -513,15 +513,40 @@ def created_app():
             values = [0]*6
             country_label = "Tous les pays"
 
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
-        fig.update_layout(title_text=f"Mix énergétique : {country_label}")
 
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+        fig.update_layout(
+            margin=dict(l=10, r=10, t=40, b=10),  # réduit les marges pour maximiser le camembert
+            height=380,  # conserve la hauteur du container
+        )
+
+
+
+
+
+        
+        # Question 7
+        query_q7 = f"""
+                SELECT
+                    country,
+                    coal*820 AS coal_emission,
+                    gas*490 AS gas_emission,
+                    oil*740 AS oil_emission,
+                    nuclear*12 AS nuclear_emission,
+                    hydro*24 AS hydro_emission,
+                    renewable*41 AS renewable_emission
+                FROM original_raw
+                {where_clause}
+        """
+        data_q7 =fetch_all(query_q7)
+        # Création des graphs
         graph = fig.to_json()
 
         return render_template("analyse.html",
                             graph=graph,
                             countries=countries,
-                            selected_country=selected_country)
+                            selected_country=selected_country,
+                            data=data_q7)
 
     
     @app.route("/methodologie")
