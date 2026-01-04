@@ -575,8 +575,8 @@ def created_app():
                 FROM contributions
             )
             SELECT
-                ROUND(total_gco2_per_kwh / 1000, 3) AS total_kg_per_kwh,
-                ROUND((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}, 2) AS annual_emission_kg,
+                ROUND(total_gco2_per_kwh / 1000, 6) AS total_kg_per_kwh,
+                ROUND((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}, 0) AS annual_emission_kg,
                 ROUND(((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}) / 25, 0) AS nb_tree
             FROM total_co2;
         """
