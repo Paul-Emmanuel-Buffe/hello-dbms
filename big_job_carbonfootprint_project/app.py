@@ -457,7 +457,11 @@ def created_app():
     @app.route("/analyse")
     def analyse():
         selected_country = request.args.get('country', None)
-
+        consumption = request.args.get('consumption', 1)
+        try:
+            consumption = float(consumption)
+        except ValueError:
+            consumption = 1
         countries_data = fetch_all("SELECT DISTINCT country FROM original_raw ORDER BY country")
         countries = [row['country'].capitalize() for row in countries_data]
 
@@ -528,56 +532,96 @@ def created_app():
 
         
         # Question 7
-        query_q7 = f"""
+        query_q7_q8 = f"""
 
-                    WITH country_data AS (
-                        SELECT * 
-                        FROM original_raw
-                        {where_clause}
-                        LIMIT 1
-                    ),
-                    production AS (
-                        SELECT 'Charbon' AS source, coal AS value, 820 AS factor FROM country_data
-                        UNION ALL
-                        SELECT 'Gaz Naturel', gas, 490 FROM country_data
-                        UNION ALL
-                        SELECT 'Pétrole', oil, 740 FROM country_data
-                        UNION ALL
-                        SELECT 'Hydro', hydro, 24 FROM country_data
-                        UNION ALL
-                        SELECT 'Renouvelable', renewable, 41 FROM country_data
-                        UNION ALL
-                        SELECT 'Nucléaire', nuclear, 12 FROM country_data
-                    ),
-                    contributions AS (
-                        SELECT
-                            source AS "Source de production",
-                            value AS "% d’utilisation",
-                            factor AS "Médiane de gCO2/kWh",
-                            ROUND((value / 100) * factor,1) AS "Contribution en émission gCO2/kWh"
-                        FROM production
-                    )
-                    -- On sélectionne toutes les lignes + la ligne "Total"
+                WITH country_data AS (
                     SELECT *
-                    FROM contributions
-
-                    UNION ALL
-
+                    FROM original_raw
+                    { where_clause }
+                    LIMIT 1
+                ),
+                production AS (
+                    SELECT 'Charbon' AS source, coal AS pct, 820 AS factor FROM country_data
+                    UNION ALL SELECT 'Gaz', gas, 490 FROM country_data
+                    UNION ALL SELECT 'Pétrole', oil, 740 FROM country_data
+                    UNION ALL SELECT 'Hydro', hydro, 24 FROM country_data
+                    UNION ALL SELECT 'Renouvelable', renewable, 41 FROM country_data
+                    UNION ALL SELECT 'Nucléaire', nuclear, 12 FROM country_data
+                ),
+                contributions AS (
                     SELECT
-                        'Total de toutes les sources' AS "Source de production",
-                        NULL AS "% d’utilisation",
-                        NULL AS "Médiane de gCO2/kWh",
-                        ROUND(SUM("Contribution en émission gCO2/kWh"),1) AS "Contribution en émission gCO2/kWh"
-                    FROM contributions;
+                        source AS "Source de production",
+                        pct AS "% d’utilisation",
+                        factor AS "Médiane de gCO2/kWh",
+                        ROUND((pct / 100) * factor, 1) AS "Contribution en émission gCO2/kWh"
+                    FROM production
+                )
+                SELECT *
+                FROM contributions
+
+                UNION ALL
+
+                SELECT
+                    'Total de toutes les sources',
+                    NULL,
+                    NULL,
+                    ROUND(SUM("Contribution en émission gCO2/kWh"),1)
+                FROM contributions;
+
+
                 """
 
 
-        data_q7 =fetch_all(query_q7)
+        data_q7_q8 =fetch_all(query_q7_q8)
+
+
         # Gestion des null pour l'affichage
-        for row in data_q7:
+        for row in data_q7_q8:
             for key in ["% d’utilisation", "Médiane de gCO2/kWh"]:
                 if row[key] is None:
                     row[key] = ""
+
+        # Q9
+        query_q9= f"""
+                   
+                WITH country_data AS (
+                    SELECT * 
+                    FROM original_raw
+                    {where_clause}
+                    LIMIT 1
+                ),
+                production AS (
+                    SELECT 'Charbon' AS source, coal AS value, 820 AS factor FROM country_data
+                    UNION ALL
+                    SELECT 'Gaz Naturel', gas, 490 FROM country_data
+                    UNION ALL
+                    SELECT 'Pétrole', oil, 740 FROM country_data
+                    UNION ALL
+                    SELECT 'Hydro', hydro, 24 FROM country_data
+                    UNION ALL
+                    SELECT 'Renouvelable', renewable, 41 FROM country_data
+                    UNION ALL
+                    SELECT 'Nucléaire', nuclear, 12 FROM country_data
+                ),
+                contributions AS (
+                    SELECT
+                        (value / 100) * factor AS contribution_gco2_per_kwh
+                    FROM production
+                ),
+                total_co2 AS (
+                    SELECT
+                        SUM(contribution_gco2_per_kwh) AS total_gco2_per_kwh
+                    FROM contributions
+                )
+                SELECT
+                    ROUND(total_gco2_per_kwh / 1000, 3) AS total_kg_per_kwh,
+                    ROUND((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}, 2) AS annual_emission_kg,
+                    ROUND(((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}) / 25, 0) AS nb_tree
+                FROM total_co2;
+                """
+
+
+        data_q9 =fetch_all(query_q9)
         # Création des graphs
         graph = fig.to_json()
 
@@ -585,7 +629,8 @@ def created_app():
                             graph=graph,
                             countries=countries,
                             selected_country=selected_country,
-                            data=data_q7)
+                            data=data_q7_q8,
+                            data2=data_q9)
 
     
     @app.route("/methodologie")

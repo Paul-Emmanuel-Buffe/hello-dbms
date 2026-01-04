@@ -141,6 +141,42 @@
         </div>
     </div>
 
+    <!-- Card : Émissions annuelles de CO2 avec consommation personnalisée -->
+    <div class="card">
+        <div class="card-header">
+            Émissions annuelles de CO₂
+        </div>
+        <div class="card-body">
+
+            <!-- Sélecteur de consommation -->
+            <div class="filters" style="margin-bottom: 20px;">
+                <form method="get">
+                    <!-- On garde le pays dans l'URL pour filtrage -->
+                    <input type="hidden" name="country" value="{{ selected_country or '' }}">
+                    
+                    <label for="consumption">Consommation électrique (kW) :</label>
+                    <input type="number" step="0.1" min="0" name="consumption" id="consumption"
+                        value="{{ consumption or 1 }}">
+                    <button type="submit">Calculer</button>
+                </form>
+            </div>
+
+            <!-- Résultats -->
+            {% if data2 %}
+                {% set row = data2[0] %}
+                <p>
+                    <strong>Émission totale par kWh :</strong> {{ row.total_kg_per_kwh }} kgCO₂/kWh<br>
+                    <strong>Émission annuelle {{ selected_country | capitalize }} :</strong> {{ row.annual_emission_kg }} kg de CO₂</br>
+                    <strong>Compensation végétale :</strong> {{ row.nb_tree }} arbres devront être plantés
+                </p>
+            {% else %}
+                <p style="color:#666;">Aucune donnée à afficher pour ce pays.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+
 </div>
 
 <!-- Script Plotly -->
