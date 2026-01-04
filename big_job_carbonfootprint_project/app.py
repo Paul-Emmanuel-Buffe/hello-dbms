@@ -5,43 +5,44 @@ import plotly.offline as pyo
 import json
 
 
-
 def created_app():
-# appli Flask
+    # appli Flask
     app = Flask(__name__)
 
-    #Routes
+    # Routes
     @app.route("/")
     def index():
-        query="""
-                SELECT * FROM (
-                            SELECT *
-                            FROM original_raw
-                            LIMIT 5
-                        )
-                UNION ALL
-                SELECT * FROM (
-                    SELECT *
-                    FROM original_raw
-                    LIMIT 7 OFFSET (SELECT COUNT(*) -10 FROM original_raw)
-                )
-            """
+        query = """
+            SELECT * FROM (
+                SELECT *
+                FROM original_raw
+                LIMIT 5
+            )
+            UNION ALL
+            SELECT * FROM (
+                SELECT *
+                FROM original_raw
+                LIMIT 7 OFFSET (SELECT COUNT(*) -10 FROM original_raw)
+            )
+        """
 
         data = fetch_all(query)
         return render_template("index.html", data=data)
 
     @app.route("/observations")
-    def observations(): 
+    def observations():
         # requette sql pour obtenir les données mondiales
-        query= """ SELECT
-                    ROUND(gas)       AS "Gaz",
-                    ROUND(oil)       AS "Pétrole",
-                    ROUND(coal)      AS "Charbon",
-                    ROUND(nuclear)   AS "Nucléaire",
-                    ROUND(hydro)     AS "Hydro",
-                    ROUND(renewable) AS "Renouvelables"
-                FROM world
-                WHERE region = 'world';"""
+        query = """
+            SELECT
+                ROUND(gas)       AS "Gaz",
+                ROUND(oil)       AS "Pétrole",
+                ROUND(coal)      AS "Charbon",
+                ROUND(nuclear)   AS "Nucléaire",
+                ROUND(hydro)     AS "Hydro",
+                ROUND(renewable) AS "Renouvelables"
+            FROM world
+            WHERE region = 'world';
+        """
 
         data = fetch_all(query)
 
@@ -53,13 +54,13 @@ def created_app():
 
         # couleurs choisies
         colors = [
-                    '#1F4E79',
-                    '#C44536',
-                    '#4D4D4D',
-                    '#6A5ACD',
-                    '#2E8B57',
-                    '#F2B705'
-                ]
+            '#1F4E79',
+            '#C44536',
+            '#4D4D4D',
+            '#6A5ACD',
+            '#2E8B57',
+            '#F2B705'
+        ]
 
         # création du graph
         fig = go.Figure(data=[go.Pie(
@@ -83,14 +84,14 @@ def created_app():
 
         ## Second graph
         query_2 = """
-                    SELECT
-                        region,
-                        CEIL(gas + oil + coal) AS "Energies fossiles",
-                        ROUND(hydro + renewable + nuclear) AS "Energies ditent propres"
-                    FROM world WHERE region = 'world'
-            """
+            SELECT
+                region,
+                CEIL(gas + oil + coal) AS "Energies fossiles",
+                ROUND(hydro + renewable + nuclear) AS "Energies ditent propres"
+            FROM world WHERE region = 'world'
+        """
 
-        data_2  = fetch_all(query_2)
+        data_2 = fetch_all(query_2)
 
         # selection des colonnes second graph
         columns_2 = ["Energies fossiles", "Energies ditent propres"]
@@ -100,9 +101,9 @@ def created_app():
 
         # couleurs choisies
         colors_2 = [
-                        '#8B0000',  # Énergies fossiles – rouge sombre 
-                        '#228B22'   # Énergies dites propres – vert profond 
-                    ]
+            '#8B0000',  # Énergies fossiles – rouge sombre
+            '#228B22'   # Énergies dites propres – vert profond
+        ]
 
         # création du graph
         fig_2 = go.Figure(data=[go.Pie(
@@ -126,23 +127,23 @@ def created_app():
 
         ### Card 2 - graph en barres
         query_3 = """
-                    SELECT 
-                        CASE region
-                            WHEN 'east asia & pacific' THEN 'Asie-Pacifique'
-                            WHEN 'europe & central' THEN 'Europe & Asie Centrale'
-                            WHEN 'latin america & caribbean' THEN 'Amérique Latine & Caraïbes'
-                            WHEN 'middle east & north afrika' THEN 'Moyen-Orient & Afrique du Nord'
-                            WHEN 'north america' THEN 'Amérique du Nord'
-                            WHEN 'south asia' THEN 'Asie du Sud'
-                            WHEN 'sub­saharan africa'THEN 'Afrique Subsaharienne'
-                            ELSE region  
-                        END AS region,
-                        (gas + oil + coal) AS "Energies fossiles",
-                        ROUND(hydro + renewable + nuclear) AS "Autres"
-                    FROM world
-                    WHERE region != 'world'
-                    ORDER BY region;
-                """
+            SELECT
+                CASE region
+                    WHEN 'east asia & pacific' THEN 'Asie-Pacifique'
+                    WHEN 'europe & central' THEN 'Europe & Asie Centrale'
+                    WHEN 'latin america & caribbean' THEN 'Amérique Latine & Caraïbes'
+                    WHEN 'middle east & north afrika' THEN 'Moyen-Orient & Afrique du Nord'
+                    WHEN 'north america' THEN 'Amérique du Nord'
+                    WHEN 'south asia' THEN 'Asie du Sud'
+                    WHEN 'sub­saharan africa'THEN 'Afrique Subsaharienne'
+                    ELSE region
+                END AS region,
+                (gas + oil + coal) AS "Energies fossiles",
+                ROUND(hydro + renewable + nuclear) AS "Autres"
+            FROM world
+            WHERE region != 'world'
+            ORDER BY region;
+        """
 
         data_3 = fetch_all(query_3)
 
@@ -153,7 +154,7 @@ def created_app():
         fossiles = [row['Energies fossiles'] for row in data_3_sorted]
         autres = [row['Autres'] for row in data_3_sorted]
 
-        # couleurs 
+        # couleurs
         colors_bar = ['#C85A54', '#5CB85C']
 
         # Création du bar chart
@@ -188,31 +189,30 @@ def created_app():
             margin=dict(t=50, b=100, l=50, r=50)
         )
 
-       ## Card 3 - Graph à barres horizontales empilées
+        ## Card 3 - Graph à barres horizontales empilées
         query_4 = """
-                                SELECT 
-                                    CASE country
-                                        WHEN 'china' THEN 'Chine'
-                                        WHEN 'united states' THEN 'États-Unis'
-                                        WHEN 'india' THEN 'Inde'
-                                        WHEN 'japan' THEN 'Japon'
-                                        WHEN 'russia' THEN 'Russie'
-                                    END AS "Pays",
-                                    coal      AS "Charbon",
-                                    gas       AS "Gaz",
-                                    oil       AS "Pétrole",
-                                    nuclear   AS "Nucléaire",
-                                    hydro     AS "Hydraulique",
-                                    renewable AS "Renouvelables"
-                                FROM country
-                                WHERE country IN ('china', 'united states', 'india', 'japan', 'russia')
-                                ORDER BY 3 DESC;
-                            """
+            SELECT
+                CASE country
+                    WHEN 'china' THEN 'Chine'
+                    WHEN 'united states' THEN 'États-Unis'
+                    WHEN 'india' THEN 'Inde'
+                    WHEN 'japan' THEN 'Japon'
+                    WHEN 'russia' THEN 'Russie'
+                END AS "Pays",
+                coal      AS "Charbon",
+                gas       AS "Gaz",
+                oil       AS "Pétrole",
+                nuclear   AS "Nucléaire",
+                hydro     AS "Hydraulique",
+                renewable AS "Renouvelables"
+            FROM country
+            WHERE country IN ('china', 'united states', 'india', 'japan', 'russia')
+            ORDER BY 3 DESC;
+        """
 
         data_4 = fetch_all(query_4)
 
         # Préparation des listes
-        # Préparation des listes
         pays = [row['Pays'] for row in data_4]
         gaz = [row['Gaz'] for row in data_4]
         petrole = [row['Pétrole'] for row in data_4]
@@ -221,32 +221,19 @@ def created_app():
         hydraulique = [row['Hydraulique'] for row in data_4]
         renouvelables = [row['Renouvelables'] for row in data_4]
 
-        # couleurs 
+        # couleurs
         colors_bar = [
-                        '#FF6B6B',  # Gaz –
-                        '#FFA94D',  # Pétrole 
-                        '#4D79FF',  # Charbon 
-                        '#6F42C1',  # Nucléaire 
-                        '#4DBD33',  # Hydraulique 
-                        '#20C997'   # Renouvelables 
-                    ]
+            '#FF6B6B',  # Gaz
+            '#FFA94D',  # Pétrole
+            '#4D79FF',  # Charbon
+            '#6F42C1',  # Nucléaire
+            '#4DBD33',  # Hydraulique
+            '#20C997'   # Renouvelables
+        ]
 
-
-        # Création du bar chart
-
-
-        # Préparation des listes depuis data_4
-        pays = [row['Pays'] for row in data_4]
-        gaz = [row['Gaz'] for row in data_4]
-        petrole = [row['Pétrole'] for row in data_4]
-        charbon = [row['Charbon'] for row in data_4]
-        nucleaire = [row['Nucléaire'] for row in data_4]
-        hydraulique = [row['Hydraulique'] for row in data_4]
-        renouvelables = [row['Renouvelables'] for row in data_4]
-
-            # Création du graphique en barres horizontales empilées
+        # Création du graphique en barres horizontales empilées
         graph_4 = go.Figure()
-        graph_4.add_trace(go.Bar(name='Charbon', y=pays, x=charbon, orientation='h', marker_color=colors_bar[2]))  # charbon en premier
+        graph_4.add_trace(go.Bar(name='Charbon', y=pays, x=charbon, orientation='h', marker_color=colors_bar[2]))
         graph_4.add_trace(go.Bar(name='Gaz', y=pays, x=gaz, orientation='h', marker_color=colors_bar[0]))
         graph_4.add_trace(go.Bar(name='Pétrole', y=pays, x=petrole, orientation='h', marker_color=colors_bar[1]))
         graph_4.add_trace(go.Bar(name='Nucléaire', y=pays, x=nucleaire, orientation='h', marker_color=colors_bar[3]))
@@ -261,18 +248,16 @@ def created_app():
             legend_title="Sources d'énergie",
             template="plotly_white",
             xaxis=dict(
-                    ticksuffix=" %"
-                ),
+                ticksuffix=" %"
+            ),
             yaxis=dict(
                 automargin=True,
                 tickfont=dict(size=15)
-                ),
-                margin=dict(l=150, r=150)
-            )
+            ),
+            margin=dict(l=150, r=150)
+        )
 
-
-       ## Card 4
-       ## Card 4 - Mix énergétique (Danemark)
+        ## Card 4 - Mix énergétique (Danemark)
         query_5 = """
             SELECT
                 gas       AS "Gaz",
@@ -284,31 +269,28 @@ def created_app():
             WHERE country = 'denmark';
         """
 
-
         data_5 = fetch_all(query_5)
 
         columns_5 = [
-                    "Gaz",
-                    "Pétrole",
-                    "Charbon",
-                    "Renouvelables",
-                    "Autres"
-                ]
+            "Gaz",
+            "Pétrole",
+            "Charbon",
+            "Renouvelables",
+            "Autres"
+        ]
 
         # valeurs correspondantes
         values_5 = [data_5[0][col] for col in columns_5]
 
         # couleurs éclaircies (même teintes, plus lisibles)
         colors = [
-            '#4F81BD',  # Bleu – Gaz 
-            '#E57368',  # Rouge – Pétrole 
-            '#8C8C8C',  # Gris – Charbon 
-            '#FFD166',  # Jaune – Renouvelables 
-            '#7C5CFF' # Autres
+            '#4F81BD',  # Bleu – Gaz
+            '#E57368',  # Rouge – Pétrole
+            '#8C8C8C',  # Gris – Charbon
+            '#FFD166',  # Jaune – Renouvelables
+            '#7C5CFF'   # Autres
         ]
 
-
-                
         # création du graph
         fig_5 = go.Figure(data=[go.Pie(
             labels=columns_5,
@@ -320,7 +302,7 @@ def created_app():
             hoverlabel=dict(font=dict(size=16))
         )])
 
-        # mise en page  
+        # mise en page
         fig_5.update_layout(
             title_text="Danemark",
             title_font_size=18,
@@ -329,8 +311,7 @@ def created_app():
             margin=dict(t=50, b=20, l=20, r=20)
         )
 
-
-       ##  Mix énergétique (Nicaragua)
+        ## Mix énergétique (Nicaragua)
         query_6 = """
             SELECT
                 oil       AS "Pétrole",
@@ -340,27 +321,24 @@ def created_app():
             WHERE country = 'nicaragua';
         """
 
-
         data_6 = fetch_all(query_6)
 
         columns_6 = [
-                        "Pétrole",
-                        "Hydro",
-                        "Renouvelables"
-                    ]
+            "Pétrole",
+            "Hydro",
+            "Renouvelables"
+        ]
 
         # valeurs correspondantes
         values_6 = [data_6[0][col] for col in columns_6]
 
         # couleurs éclaircies (même teintes, plus lisibles)
         colors = [
-            '#E57368',  # Rouge – Pétrole 
-            '#6FCF97',  # Vert – Hydraulique 
-            '#FFD166'   # Jaune – Renouvelables 
+            '#E57368',  # Rouge – Pétrole
+            '#6FCF97',  # Vert – Hydraulique
+            '#FFD166'   # Jaune – Renouvelables
         ]
 
-
-                
         # création du graph
         fig_6 = go.Figure(data=[go.Pie(
             labels=columns_6,
@@ -372,7 +350,7 @@ def created_app():
             hoverlabel=dict(font=dict(size=16))
         )])
 
-        # mise en page  
+        # mise en page
         fig_6.update_layout(
             title_text="Nicargua",
             title_font_size=18,
@@ -381,7 +359,7 @@ def created_app():
             margin=dict(t=50, b=20, l=20, r=20)
         )
 
-       ##  Mix énergétique (kenya)
+        ## Mix énergétique (kenya)
         query_7 = """
             SELECT
                 oil       AS "Pétrole",
@@ -391,27 +369,24 @@ def created_app():
             WHERE country = 'kenya';
         """
 
-
         data_7 = fetch_all(query_7)
 
         columns_7 = [
-                        "Pétrole",
-                        "Hydro",
-                        "Renouvelables"
-                    ]
+            "Pétrole",
+            "Hydro",
+            "Renouvelables"
+        ]
 
         # valeurs correspondantes
         values_7 = [data_7[0][col] for col in columns_7]
 
         # couleurs éclaircies (même teintes, plus lisibles)
         colors = [
-            '#E57368',  # Rouge – Pétrole  
-            '#6FCF97',  # Vert – Hydraulique 
-            '#FFD166'   # Jaune – Renouvelables 
+            '#E57368',  # Rouge – Pétrole
+            '#6FCF97',  # Vert – Hydraulique
+            '#FFD166'   # Jaune – Renouvelables
         ]
 
-
-                
         # création du graph
         fig_7 = go.Figure(data=[go.Pie(
             labels=columns_7,
@@ -423,7 +398,7 @@ def created_app():
             hoverlabel=dict(font=dict(size=16))
         )])
 
-        # mise en page  
+        # mise en page
         fig_7.update_layout(
             title_text="Kenya",
             title_font_size=18,
@@ -431,19 +406,18 @@ def created_app():
             showlegend=False,
             margin=dict(t=50, b=20, l=20, r=20)
         )
-            
-       # Conversion en JSON pour tous les graphs
+
+        # Conversion en JSON pour tous les graphs
         graph = fig.to_json()
         graph_2 = fig_2.to_json()
         graph_3 = fig_3.to_json()
-        graph_4_json = graph_4.to_json()  
+        graph_4_json = graph_4.to_json()
         graph_5_json = fig_5.to_json()
         graph_6_json = fig_6.to_json()
         graph_7_json = fig_7.to_json()
 
-
         return render_template(
-            "observations.html", 
+            "observations.html",
             graph=graph,
             graph_2=graph_2,
             graph_bar=graph_3,
@@ -452,7 +426,6 @@ def created_app():
             graph_6=graph_6_json,
             graph_7=graph_7_json
         )
-
 
     @app.route("/analyse")
     def analyse():
@@ -509,132 +482,121 @@ def created_app():
 
         data = fetch_all(query)
 
-        columns = ["coal_pct","gas_pct","oil_pct","nuclear_pct","hydro_pct","renewable_pct"]
-        labels = ["Charbon","Gaz","Pétrole","Nucléaire","Hydro","Renouvelables"]
+        columns = ["coal_pct", "gas_pct", "oil_pct", "nuclear_pct", "hydro_pct", "renewable_pct"]
+        labels = ["Charbon", "Gaz", "Pétrole", "Nucléaire", "Hydro", "Renouvelables"]
 
         if data:
             values = [data[0][col] if data[0][col] is not None else 0 for col in columns]
             country_label = selected_country.capitalize() if selected_country else "Tous les pays"
         else:
-            values = [0]*6
+            values = [0] * 6
             country_label = "Tous les pays"
-
 
         fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
         fig.update_layout(
-            margin=dict(l=10, r=10, t=40, b=10),  # réduit les marges pour maximiser le camembert
-            height=380,  # conserve la hauteur du container
+            margin=dict(l=10, r=10, t=40, b=10),
+            height=380,
         )
 
-
-
-
-
-        
         # Question 7
         query_q7_q8 = f"""
-
-                WITH country_data AS (
-                    SELECT *
-                    FROM original_raw
-                    { where_clause }
-                    LIMIT 1
-                ),
-                production AS (
-                    SELECT 'Charbon' AS source, coal AS pct, 820 AS factor FROM country_data
-                    UNION ALL SELECT 'Gaz', gas, 490 FROM country_data
-                    UNION ALL SELECT 'Pétrole', oil, 740 FROM country_data
-                    UNION ALL SELECT 'Hydro', hydro, 24 FROM country_data
-                    UNION ALL SELECT 'Renouvelable', renewable, 41 FROM country_data
-                    UNION ALL SELECT 'Nucléaire', nuclear, 12 FROM country_data
-                ),
-                contributions AS (
-                    SELECT
-                        source AS "Source de production",
-                        pct AS "% d’utilisation",
-                        factor AS "Médiane de gCO2/kWh",
-                        ROUND((pct / 100) * factor, 1) AS "Contribution en émission gCO2/kWh"
-                    FROM production
-                )
+            WITH country_data AS (
                 SELECT *
-                FROM contributions
-
-                UNION ALL
-
+                FROM original_raw
+                {where_clause}
+                LIMIT 1
+            ),
+            production AS (
+                SELECT 'Charbon' AS source, coal AS pct, 820 AS factor FROM country_data
+                UNION ALL SELECT 'Gaz', gas, 490 FROM country_data
+                UNION ALL SELECT 'Pétrole', oil, 740 FROM country_data
+                UNION ALL SELECT 'Hydro', hydro, 24 FROM country_data
+                UNION ALL SELECT 'Renouvelable', renewable, 41 FROM country_data
+                UNION ALL SELECT 'Nucléaire', nuclear, 12 FROM country_data
+            ),
+            contributions AS (
                 SELECT
-                    'Total de toutes les sources',
-                    NULL,
-                    NULL,
-                    ROUND(SUM("Contribution en émission gCO2/kWh"),1)
-                FROM contributions;
+                    source AS "Source de production",
+                    pct AS "% d'utilisation",
+                    factor AS "Médiane de gCO2/kWh",
+                    ROUND((pct / 100) * factor, 1) AS "Contribution en émission gCO2/kWh"
+                FROM production
+            )
+            SELECT *
+            FROM contributions
 
+            UNION ALL
 
-                """
+            SELECT
+                'Total de toutes les sources',
+                NULL,
+                NULL,
+                ROUND(SUM("Contribution en émission gCO2/kWh"),1)
+            FROM contributions;
+        """
 
-
-        data_q7_q8 =fetch_all(query_q7_q8)
-
+        data_q7_q8 = fetch_all(query_q7_q8)
 
         # Gestion des null pour l'affichage
         for row in data_q7_q8:
-            for key in ["% d’utilisation", "Médiane de gCO2/kWh"]:
+            for key in ["% d'utilisation", "Médiane de gCO2/kWh"]:
                 if row[key] is None:
                     row[key] = ""
 
         # Q9
-        query_q9= f"""
-                   
-                WITH country_data AS (
-                    SELECT * 
-                    FROM original_raw
-                    {where_clause}
-                    LIMIT 1
-                ),
-                production AS (
-                    SELECT 'Charbon' AS source, coal AS value, 820 AS factor FROM country_data
-                    UNION ALL
-                    SELECT 'Gaz Naturel', gas, 490 FROM country_data
-                    UNION ALL
-                    SELECT 'Pétrole', oil, 740 FROM country_data
-                    UNION ALL
-                    SELECT 'Hydro', hydro, 24 FROM country_data
-                    UNION ALL
-                    SELECT 'Renouvelable', renewable, 41 FROM country_data
-                    UNION ALL
-                    SELECT 'Nucléaire', nuclear, 12 FROM country_data
-                ),
-                contributions AS (
-                    SELECT
-                        (value / 100) * factor AS contribution_gco2_per_kwh
-                    FROM production
-                ),
-                total_co2 AS (
-                    SELECT
-                        SUM(contribution_gco2_per_kwh) AS total_gco2_per_kwh
-                    FROM contributions
-                )
+        query_q9 = f"""
+            WITH country_data AS (
+                SELECT *
+                FROM original_raw
+                {where_clause}
+                LIMIT 1
+            ),
+            production AS (
+                SELECT 'Charbon' AS source, coal AS value, 820 AS factor FROM country_data
+                UNION ALL
+                SELECT 'Gaz Naturel', gas, 490 FROM country_data
+                UNION ALL
+                SELECT 'Pétrole', oil, 740 FROM country_data
+                UNION ALL
+                SELECT 'Hydro', hydro, 24 FROM country_data
+                UNION ALL
+                SELECT 'Renouvelable', renewable, 41 FROM country_data
+                UNION ALL
+                SELECT 'Nucléaire', nuclear, 12 FROM country_data
+            ),
+            contributions AS (
                 SELECT
-                    ROUND(total_gco2_per_kwh / 1000, 3) AS total_kg_per_kwh,
-                    ROUND((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}, 2) AS annual_emission_kg,
-                    ROUND(((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}) / 25, 0) AS nb_tree
-                FROM total_co2;
-                """
+                    (value / 100) * factor AS contribution_gco2_per_kwh
+                FROM production
+            ),
+            total_co2 AS (
+                SELECT
+                    SUM(contribution_gco2_per_kwh) AS total_gco2_per_kwh
+                FROM contributions
+            )
+            SELECT
+                ROUND(total_gco2_per_kwh / 1000, 3) AS total_kg_per_kwh,
+                ROUND((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}, 2) AS annual_emission_kg,
+                ROUND(((total_gco2_per_kwh / 1000) * 24 * 365 * {consumption}) / 25, 0) AS nb_tree
+            FROM total_co2;
+        """
 
+        data_q9 = fetch_all(query_q9)
 
-        data_q9 =fetch_all(query_q9)
         # Création des graphs
         graph = fig.to_json()
 
-        return render_template("analyse.html",
-                            graph=graph,
-                            countries=countries,
-                            selected_country=selected_country,
-                            data=data_q7_q8,
-                            data2=data_q9)
+        return render_template(
+            "analyse.html",
+            graph=graph,
+            countries=countries,
+            selected_country=selected_country,
+            data=data_q7_q8,
+            data2=data_q9
+        )
 
-    
     @app.route("/methodologie")
     def methodologie():
         return render_template("methodologie.html")
-    
+
     return app
