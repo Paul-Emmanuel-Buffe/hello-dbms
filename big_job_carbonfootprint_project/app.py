@@ -464,7 +464,9 @@ def created_app():
         where_clause = ""
         if selected_country:
             country_sql = selected_country.lower()
-            where_clause = f"WHERE LOWER(country) = '{country_sql}'"
+        else:
+            country_sql = 'world'
+        where_clause = f"WHERE LOWER(country) = '{country_sql}'"
 
         # Requête modifiée pour agréger TOUS les pays si aucun n'est sélectionné
         query = f"""
@@ -527,18 +529,55 @@ def created_app():
         
         # Question 7
         query_q7 = f"""
-                SELECT
-                    country,
-                    coal*820 AS coal_emission,
-                    gas*490 AS gas_emission,
-                    oil*740 AS oil_emission,
-                    nuclear*12 AS nuclear_emission,
-                    hydro*24 AS hydro_emission,
-                    renewable*41 AS renewable_emission
-                FROM original_raw
-                {where_clause}
-        """
+
+                    WITH country_data AS (
+                        SELECT * 
+                        FROM original_raw
+                        {where_clause}
+                        LIMIT 1
+                    ),
+                    production AS (
+                        SELECT 'Charbon' AS source, coal AS value, 820 AS factor FROM country_data
+                        UNION ALL
+                        SELECT 'Gaz Naturel', gas, 490 FROM country_data
+                        UNION ALL
+                        SELECT 'Pétrole', oil, 740 FROM country_data
+                        UNION ALL
+                        SELECT 'Hydro', hydro, 24 FROM country_data
+                        UNION ALL
+                        SELECT 'Renouvelable', renewable, 41 FROM country_data
+                        UNION ALL
+                        SELECT 'Nucléaire', nuclear, 12 FROM country_data
+                    ),
+                    contributions AS (
+                        SELECT
+                            source AS "Source de production",
+                            value AS "% d’utilisation",
+                            factor AS "Médiane de gCO2/kWh",
+                            ROUND((value / 100) * factor,1) AS "Contribution en émission gCO2/kWh"
+                        FROM production
+                    )
+                    -- On sélectionne toutes les lignes + la ligne "Total"
+                    SELECT *
+                    FROM contributions
+
+                    UNION ALL
+
+                    SELECT
+                        'Total de toutes les sources' AS "Source de production",
+                        NULL AS "% d’utilisation",
+                        NULL AS "Médiane de gCO2/kWh",
+                        ROUND(SUM("Contribution en émission gCO2/kWh"),1) AS "Contribution en émission gCO2/kWh"
+                    FROM contributions;
+                """
+
+
         data_q7 =fetch_all(query_q7)
+        # Gestion des null pour l'affichage
+        for row in data_q7:
+            for key in ["% d’utilisation", "Médiane de gCO2/kWh"]:
+                if row[key] is None:
+                    row[key] = ""
         # Création des graphs
         graph = fig.to_json()
 
