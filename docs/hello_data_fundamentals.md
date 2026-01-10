@@ -12,7 +12,7 @@ Ce travail ne se limite pas à une recherche théorique. Il constitue un socle d
 
 ---
 
-## 1. La donnée : fondation de tous les systèmes data
+## La donnée : fondation de tous les systèmes data
 
 ### A. Qu'est-ce qu'une donnée ?
 
@@ -20,19 +20,19 @@ Ce travail ne se limite pas à une recherche théorique. Il constitue un socle d
 
 ---
 
-## 2. La qualité des données : fiabilité et exploitabilité
+## La qualité des données : fiabilité et exploitabilité
 
 ### C. Les critères de mesure de la qualité des données
 
 ---
 
-## 3. Les grands systèmes de stockage de données
+## Les grands systèmes de stockage de données
 
 ### D. Data Lake, Data Warehouse et Lakehouse
 
 ---
 
-## 4. Les systèmes de gestion de bases de données
+## Les systèmes de gestion de bases de données
 
 ### E. Définition et exemples de systèmes de gestion de bases de données (SGBD)
 
@@ -40,7 +40,7 @@ Ce travail ne se limite pas à une recherche théorique. Il constitue un socle d
 
 ---
 
-## 5. Les fondements de la modélisation des données
+## Les fondements de la modélisation des données
 
 ### G. Clé primaire et clé étrangère
 
@@ -86,7 +86,7 @@ Une fois qu'une transaction est validée (commit), les modifications sont défin
 
 ---
 
-## 6. Concevoir une base de données : méthodes et modélisation
+## Concevoir une base de données : méthodes et modélisation
 
 ### I. Les méthodes Merise et UML
 
@@ -296,9 +296,7 @@ Dans la pratique, les deux méthodes sont souvent utilisées ensemble dans un pr
 
 ---
 
-## 7. Le langage SQL : interroger et manipuler les données
-
-### J. Définition du langage SQL
+### J. Définition du langage SQL & commandes de base
 
 **SQL** = Structured Query Language (Langage de Requête Structuré)
 
@@ -308,7 +306,7 @@ Il s'agit d'un langage standardisé utilisé pour gérer et manipuler des bases 
 - Insérer, modifier et supprimer des données
 - Gérer les droits d'accès et la sécurité
 
-### K. Les commandes SQL les plus utilisées
+#### Les commandes SQL les plus utilisées
 
 #### Les 4 catégories de commandes SQL
 
@@ -504,34 +502,6 @@ SELECT e1.nom AS employe, e2.nom AS manager
 FROM employes e1
 LEFT JOIN employes e2 ON e1.manager_id = e2.id;
 ```
-
-#### Résumé visuel des jointures
-
-```
-Soit deux tables A et B :
-
-INNER JOIN:     ████           Intersection uniquement
-               A ∩ B
-
-LEFT JOIN:   ████████          Tout A + intersection
-             A + (A ∩ B)
-
-RIGHT JOIN:     ████████       Tout B + intersection
-                (A ∩ B) + B
-
-FULL OUTER:  ████████████      Tout A + tout B
-             A ∪ B
-
-CROSS JOIN:  A × B             Produit cartésien
-
-SELF JOIN:   A avec A          Table jointe à elle-même
-```
-
----
-
-## 8. Mise en perspective avec le projet Hello DBMS+
-
----
-
 ## 9. Lexique simplifié
 
+```
