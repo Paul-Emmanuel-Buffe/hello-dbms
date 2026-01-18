@@ -275,7 +275,7 @@ Très flexible, adaptée aux grands volumes et aux données hétérogènes.
 
 Exemple : réseau social.
 
-Métaphore :
+#### Métaphore :
 La base relationnelle est une armoire à tiroirs étiquetés.
 La base non relationnelle est un ensemble de dossiers souples.
 ---
