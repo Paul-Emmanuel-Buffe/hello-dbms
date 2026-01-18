@@ -246,7 +246,7 @@ Sources de données
 ---
 ## Les systèmes de gestion de bases de données
 
-D. Système de Gestion de Base de Données (SGBD)
+### D. Système de Gestion de Base de Données (SGBD)
 
 Un SGBD est le logiciel qui permet de stocker, modifier et retrouver les données. C’est l’intermédiaire entre l’utilisateur et la base de données. Il garantit la sécurité, la cohérence et la performance des accès aux données.
 
@@ -752,5 +752,22 @@ FROM employes e1
 LEFT JOIN employes e2 ON e1.manager_id = e2.id;
 ```
 ## 9. Lexique simplifié
+ACID : Propriétés garantissant la fiabilité des transactions.
+Atomicité : Transaction indivisible.
+Cohérence : Respect des règles métiers.
+Isolation : Transactions indépendantes.
+Durabilité : Données persistantes après validation.
 
+Base de données : Ensemble structuré de données persistantes.
+Data Lake : Stockage de données brutes.
+Data Warehouse : Base optimisée pour l’analyse décisionnelle.
+Lakehouse : Architecture hybride entre Lake et Warehouse.
+
+SGBD : Logiciel de gestion des bases de données.
+SQL : Langage standard d’interrogation des bases relationnelles.
+Clé primaire : Identifiant unique.
+Clé étrangère : Lien entre deux tables.
+Jointure : Opération reliant plusieurs tables.
+Merise : Méthode de modélisation orientée données.
+UML : Langage de modélisation orienté objet.
 ```
