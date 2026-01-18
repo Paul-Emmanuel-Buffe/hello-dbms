@@ -147,7 +147,7 @@ Ces trois architectures définissent la manière dont les données sont **stock�
 
 ### 1. Data Warehouse
 
-### Définition
+#### Définition
 Un **Data Warehouse** est une base de données dédiée à l’analyse décisionnelle.  
 Il contient des données **structurées, nettoyées et transformées**.
 
@@ -155,12 +155,12 @@ Il contient des données **structurées, nettoyées et transformées**.
 - Forte performance pour les requêtes analytiques
 - Utilisé par les analystes et décideurs
 
-### Cas d’usage
+#### Cas d’usage
 - Tableaux de bord
 - Indicateurs de performance (KPI)
 - Reporting financier
 
-### Schéma simplifié
+#### Schéma simplifié
 
 ```text
 Systèmes opérationnels
@@ -179,7 +179,7 @@ Systèmes opérationnels
 
 ### 2. Data Lake
 
-### Définition
+#### Définition
 Un **Data Lake** stocke les données **brutes**, quel que soit leur format.
 
 - Schéma à la lecture (*schema-on-read*)
@@ -187,12 +187,12 @@ Un **Data Lake** stocke les données **brutes**, quel que soit leur format.
 - Coût réduit
 - Principalement utilisé par les data scientists
 
-### Cas d’usage
+#### Cas d’usage
 - Machine Learning
 - Big Data
 - Analyse exploratoire
 
-### Schéma simplifié
+#### Schéma simplifié
 
 ```text
 Sources (IoT, logs, images, applications)
@@ -209,7 +209,7 @@ Sources (IoT, logs, images, applications)
 
 ### 3. Lakehouse
 
-### Définition
+#### Définition
 Le **Lakehouse** combine les avantages du **Data Lake** et du **Data Warehouse**.
 
 - Données structurées et non structurées
@@ -217,11 +217,11 @@ Le **Lakehouse** combine les avantages du **Data Lake** et du **Data Warehouse**
 - Transactions fiables (ACID)
 - Plateforme unique pour BI et IA
 
-### Cas d’usage
+#### Cas d’usage
 - Analytique unifiée
 - IA et reporting sur les mêmes données
 
-### Schéma simplifié
+#### Schéma simplifié
 
 ```text
 Sources de données
@@ -233,7 +233,7 @@ Sources de données
 
 ---
 
-### Tableau comparatif
+#### Tableau comparatif
 
 | Critère | Data Warehouse | Data Lake | Lakehouse |
 |------|---------------|----------|----------|
