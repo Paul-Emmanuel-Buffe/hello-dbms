@@ -244,10 +244,14 @@ Sources de données
 | IA / ML | Limité | Excellent | Excellent |
 
 ---
-
 ## Les systèmes de gestion de bases de données
 
 ### E. Définition et exemples de systèmes de gestion de bases de données (SGBD)
+Système de Gestion de Base de Données (SGBD)
+Un SGBD est le logiciel qui permet de stocker, modifier et retrouver les données. C'est le "chef d'orchestre" de la base.
+
+Exemples : MySQL (sites web), Oracle (banques), MongoDB (données flexibles), PostgreSQL.
+C'est comme à la bibliothèque, vous ne fouillez pas vous-même les rayons. Vous demandez au bibliothécaire (le SGBD) : "Je veux le dossier de Monsieur Martin". C'est lui qui va le chercher pour vous.
 
 ### F. Bases de données relationnelles et non relationnelles
 
