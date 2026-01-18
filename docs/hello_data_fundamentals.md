@@ -770,4 +770,3 @@ Clé étrangère : Lien entre deux tables.
 Jointure : Opération reliant plusieurs tables.
 Merise : Méthode de modélisation orientée données.
 UML : Langage de modélisation orienté objet.
-```
