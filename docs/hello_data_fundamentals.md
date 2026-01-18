@@ -14,35 +14,284 @@ Ce travail ne se limite pas à une recherche théorique. Il constitue un socle d
 
 ## La donnée : fondation de tous les systèmes data
 
-### A. Qu'est-ce qu'une donnée ?
+### A. Qu’est-ce qu’une donnée ? Sous quelle forme peut-elle se présenter ?
 
-### B. Sous quelles formes une donnée peut-elle se présenter ?
+### 1. Définition d’une donnée
+Une **donnée** est un fait brut, une observation ou une mesure qui, prise isolément, **n’a pas de signification**.  
+Elle devient une **information** lorsqu’elle est traitée, contextualisée et interprétée afin d’aider à la prise de décision.
 
----
+**Exemple :**
+- Données : `25`, `Paris`, `01/01/2025`
+- Information : *« La température à Paris était de 25°C le 1er janvier 2025. »*
 
-## La qualité des données : fiabilité et exploitabilité
-
-### C. Les critères de mesure de la qualité des données
-
----
-
-## Les grands systèmes de stockage de données
-
-### D. Data Lake, Data Warehouse et Lakehouse
+La donnée constitue la **matière première** des métiers liés à la data, à l’intelligence artificielle et à la business intelligence.
 
 ---
 
+### 2. Les différentes formes de données
+
+#### a) Données structurées
+- Organisées sous forme de lignes et de colonnes
+- Stockées dans des bases de données relationnelles
+- Faciles à interroger avec le langage SQL
+
+**Exemples :**
+- Tables clients
+- Transactions de ventes
+- Bases comptables
+
+```text
+ID_Client | Nom   | Âge | Pays
+101       | Aida  | 23  | France
+```
+
+---
+
+#### b) Données semi-structurées
+- Organisation partielle grâce à des balises ou clés
+- Structure flexible
+
+**Exemples :**
+- Fichiers JSON
+- Fichiers XML
+- Logs applicatifs
+
+```json
+{
+  "nom": "Aida",
+  "competences": ["Data", "IA"],
+  "etudiante": true
+}
+```
+
+---
+
+#### c) Données non structurées
+- Aucune structure prédéfinie
+- Nécessitent des traitements spécifiques pour être exploitées
+
+**Exemples :**
+- Textes libres
+- Images
+- Vidéos
+- Sons
+- Publications sur les réseaux sociaux
+
+> 📌 Plus de **80 % des données mondiales** sont non structurées.
+
+---
+
+## B. Les critères de mesure de la qualité des données
+
+La qualité des données est essentielle pour garantir la **fiabilité des analyses** et des modèles d’intelligence artificielle.
+
+### Principaux critères de qualité
+
+#### 1. Exactitude (*Accuracy*)
+La donnée doit représenter fidèlement la réalité.  
+Une erreur de saisie peut fausser toute une analyse.
+
+---
+
+#### 2. Complétude (*Completeness*)
+Toutes les informations nécessaires doivent être présentes.  
+Exemple : un client sans adresse e-mail rend certaines actions impossibles.
+
+---
+
+#### 3. Cohérence (*Consistency*)
+La même donnée doit être identique dans tous les systèmes.  
+Exemple : un client ne peut pas avoir deux dates de naissance différentes selon la base consultée.
+
+---
+
+#### 4. Actualité (*Timeliness*)
+Les données doivent être à jour et disponibles au bon moment.  
+Des données obsolètes entraînent de mauvaises décisions.
+
+---
+
+#### 5. Validité (*Validity*)
+Les données doivent respecter des règles et des formats définis.
+
+**Exemples :**
+- Adresse e-mail valide
+- Âge strictement positif
+
+---
+
+#### 6. Unicité (*Uniqueness*)
+Une donnée ne doit pas être dupliquée.  
+Les doublons faussent les indicateurs et les statistiques.
+
+---
+
+### Tableau récapitulatif
+
+| Critère | Description |
+|-------|-------------|
+| Exactitude | Donnée correcte |
+| Complétude | Donnée complète |
+| Cohérence | Donnée identique partout |
+| Actualité | Donnée récente |
+| Validité | Respect des règles |
+| Unicité | Absence de doublons |
+
+---
+
+## C. Data Lake, Data Warehouse et Lakehouse
+
+Ces trois architectures définissent la manière dont les données sont **stockées, organisées et exploitées**.
+
+---
+
+### 1. Data Warehouse
+
+#### Définition
+Un **Data Warehouse** est une base de données dédiée à l’analyse décisionnelle.  
+Il contient des données **structurées, nettoyées et transformées**.
+
+- Schéma à l’écriture (*schema-on-write*)
+- Forte performance pour les requêtes analytiques
+- Utilisé par les analystes et décideurs
+
+#### Cas d’usage
+- Tableaux de bord
+- Indicateurs de performance (KPI)
+- Reporting financier
+
+#### Schéma simplifié
+
+```text
+Systèmes opérationnels
+        ↓
+      ETL
+        ↓
+   Data Warehouse
+        ↓
+     BI / Reporting
+```
+
+**Avantages :** données fiables, performance élevée  
+**Limites :** faible flexibilité
+
+---
+
+### 2. Data Lake
+
+#### Définition
+Un **Data Lake** stocke les données **brutes**, quel que soit leur format.
+
+- Schéma à la lecture (*schema-on-read*)
+- Très grande capacité de stockage
+- Coût réduit
+- Principalement utilisé par les data scientists
+
+#### Cas d’usage
+- Machine Learning
+- Big Data
+- Analyse exploratoire
+
+#### Schéma simplifié
+
+```text
+Sources (IoT, logs, images, applications)
+                 ↓
+              Data Lake
+                 ↓
+      IA / Analyse avancée
+```
+
+**Avantages :** flexibilité, scalabilité  
+**Limites :** risque de *Data Swamp* sans gouvernance
+
+---
+
+### 3. Lakehouse
+
+#### Définition
+Le **Lakehouse** combine les avantages du **Data Lake** et du **Data Warehouse**.
+
+- Données structurées et non structurées
+- Schéma hybride
+- Transactions fiables (ACID)
+- Plateforme unique pour BI et IA
+
+#### Cas d’usage
+- Analytique unifiée
+- IA et reporting sur les mêmes données
+
+#### Schéma simplifié
+
+```text
+Sources de données
+        ↓
+     Lakehouse
+      ↙     ↘
+   BI       IA / ML
+```
+
+---
+
+#### Tableau comparatif
+
+| Critère | Data Warehouse | Data Lake | Lakehouse |
+|------|---------------|----------|----------|
+| Type de données | Structurées | Toutes | Toutes |
+| Schéma | Écriture | Lecture | Hybride |
+| Coût | Élevé | Faible | Moyen |
+| BI | Excellent | Limité | Excellent |
+| IA / ML | Limité | Excellent | Excellent |
+
+---
 ## Les systèmes de gestion de bases de données
 
-### E. Définition et exemples de systèmes de gestion de bases de données (SGBD)
+### D. Système de Gestion de Base de Données (SGBD)
 
-### F. Bases de données relationnelles et non relationnelles
+Un SGBD est le logiciel qui permet de stocker, modifier et retrouver les données. C’est l’intermédiaire entre l’utilisateur et la base de données. Il garantit la sécurité, la cohérence et la performance des accès aux données.
 
+Exemples de SGBD :
+MySQL (applications web),
+PostgreSQL (analytique et applications complexes),
+Oracle (systèmes bancaires),
+MongoDB (données flexibles).
+
+Métaphore :
+Dans une bibliothèque, vous ne fouillez pas vous-même les rayons. Vous demandez au bibliothécaire. Le SGBD joue ce rôle.
+C'est comme à la bibliothèque, vous ne fouillez pas vous-même les rayons. Vous demandez au bibliothécaire (le SGBD) : "Je veux le dossier de Monsieur Martin". C'est lui qui va le chercher pour vous.
+
+### E. Bases de données relationnelles et non relationnelles
+Base de données relationnelle (SQL)
+
+Les données sont organisées en tables liées entre elles par des relations.
+Structure rigide, forte cohérence et contraintes strictes.
+
+Exemple : système bancaire.
+
+Base de données non relationnelle (NoSQL)
+
+Les données sont stockées sous forme de documents, clés-valeurs ou graphes.
+Très flexible, adaptée aux grands volumes et aux données hétérogènes.
+
+Exemple : réseau social.
+
+#### Métaphore :
+La base relationnelle est une armoire à tiroirs étiquetés.
+La base non relationnelle est un ensemble de dossiers souples.
 ---
 
 ## Les fondements de la modélisation des données
 
-### G. Clé primaire et clé étrangère
+### F. Clé primaire et clé étrangère
+
+Clé primaire : identifiant unique d’une ligne dans une table.
+Clé étrangère : clé primaire d’une autre table utilisée pour créer une relation.
+
+Métaphore :
+Le numéro de carte d’identité est une clé primaire.
+Lorsqu’il apparaît sur un contrat, il devient une clé étrangère.
+
+(Sections G à L conservées intégralement)
 
 ### H. Les propriétés ACID
 
@@ -503,5 +752,22 @@ FROM employes e1
 LEFT JOIN employes e2 ON e1.manager_id = e2.id;
 ```
 ## 9. Lexique simplifié
+ACID : Propriétés garantissant la fiabilité des transactions.
+Atomicité : Transaction indivisible.
+Cohérence : Respect des règles métiers.
+Isolation : Transactions indépendantes.
+Durabilité : Données persistantes après validation.
 
+Base de données : Ensemble structuré de données persistantes.
+Data Lake : Stockage de données brutes.
+Data Warehouse : Base optimisée pour l’analyse décisionnelle.
+Lakehouse : Architecture hybride entre Lake et Warehouse.
+
+SGBD : Logiciel de gestion des bases de données.
+SQL : Langage standard d’interrogation des bases relationnelles.
+Clé primaire : Identifiant unique.
+Clé étrangère : Lien entre deux tables.
+Jointure : Opération reliant plusieurs tables.
+Merise : Méthode de modélisation orientée données.
+UML : Langage de modélisation orienté objet.
 ```
