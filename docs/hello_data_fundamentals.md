@@ -14,7 +14,7 @@ Ce travail ne se limite pas à une recherche théorique. Il constitue un socle d
 
 ## La donnée : fondation de tous les systèmes data
 
-## A. Qu’est-ce qu’une donnée ? Sous quelle forme peut-elle se présenter ?
+### A. Qu’est-ce qu’une donnée ? Sous quelle forme peut-elle se présenter ?
 
 ### 1. Définition d’une donnée
 Une **donnée** est un fait brut, une observation ou une mesure qui, prise isolément, **n’a pas de signification**.  
@@ -145,7 +145,7 @@ Ces trois architectures définissent la manière dont les données sont **stock�
 
 ---
 
-## 1. Data Warehouse
+### 1. Data Warehouse
 
 ### Définition
 Un **Data Warehouse** est une base de données dédiée à l’analyse décisionnelle.  
@@ -177,7 +177,7 @@ Systèmes opérationnels
 
 ---
 
-## 2. Data Lake
+### 2. Data Lake
 
 ### Définition
 Un **Data Lake** stocke les données **brutes**, quel que soit leur format.
@@ -207,7 +207,7 @@ Sources (IoT, logs, images, applications)
 
 ---
 
-## 3. Lakehouse
+### 3. Lakehouse
 
 ### Définition
 Le **Lakehouse** combine les avantages du **Data Lake** et du **Data Warehouse**.
@@ -233,7 +233,7 @@ Sources de données
 
 ---
 
-## Tableau comparatif
+### Tableau comparatif
 
 | Critère | Data Warehouse | Data Lake | Lakehouse |
 |------|---------------|----------|----------|
@@ -246,20 +246,52 @@ Sources de données
 ---
 ## Les systèmes de gestion de bases de données
 
-### E. Définition et exemples de systèmes de gestion de bases de données (SGBD)
-Système de Gestion de Base de Données (SGBD)
-Un SGBD est le logiciel qui permet de stocker, modifier et retrouver les données. C'est le "chef d'orchestre" de la base.
+D. Système de Gestion de Base de Données (SGBD)
 
-Exemples : MySQL (sites web), Oracle (banques), MongoDB (données flexibles), PostgreSQL.
+Un SGBD est le logiciel qui permet de stocker, modifier et retrouver les données. C’est l’intermédiaire entre l’utilisateur et la base de données. Il garantit la sécurité, la cohérence et la performance des accès aux données.
+
+Exemples de SGBD :
+MySQL (applications web),
+PostgreSQL (analytique et applications complexes),
+Oracle (systèmes bancaires),
+MongoDB (données flexibles).
+
+Métaphore :
+Dans une bibliothèque, vous ne fouillez pas vous-même les rayons. Vous demandez au bibliothécaire. Le SGBD joue ce rôle.
 C'est comme à la bibliothèque, vous ne fouillez pas vous-même les rayons. Vous demandez au bibliothécaire (le SGBD) : "Je veux le dossier de Monsieur Martin". C'est lui qui va le chercher pour vous.
 
-### F. Bases de données relationnelles et non relationnelles
+### E. Bases de données relationnelles et non relationnelles
+Base de données relationnelle (SQL)
 
+Les données sont organisées en tables liées entre elles par des relations.
+Structure rigide, forte cohérence et contraintes strictes.
+
+Exemple : système bancaire.
+
+Base de données non relationnelle (NoSQL)
+
+Les données sont stockées sous forme de documents, clés-valeurs ou graphes.
+Très flexible, adaptée aux grands volumes et aux données hétérogènes.
+
+Exemple : réseau social.
+
+Métaphore :
+La base relationnelle est une armoire à tiroirs étiquetés.
+La base non relationnelle est un ensemble de dossiers souples.
 ---
 
 ## Les fondements de la modélisation des données
 
-### G. Clé primaire et clé étrangère
+### F. Clé primaire et clé étrangère
+
+Clé primaire : identifiant unique d’une ligne dans une table.
+Clé étrangère : clé primaire d’une autre table utilisée pour créer une relation.
+
+Métaphore :
+Le numéro de carte d’identité est une clé primaire.
+Lorsqu’il apparaît sur un contrat, il devient une clé étrangère.
+
+(Sections G à L conservées intégralement)
 
 ### H. Les propriétés ACID
 
