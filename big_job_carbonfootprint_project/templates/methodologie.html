@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Observations – Production électrique et CO₂</title>
+    <title>Méthodologie – Production électrique et CO₂</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -10,6 +10,35 @@
 
     <!-- CSS commun -->
     <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=3">
+    
+    <style>
+        .centered-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 3rem;
+        }
+        
+        .centered-content h1 {
+            margin-bottom: 4rem;
+        }
+        
+        .centered-content h2 {
+            margin-bottom: 2rem;
+        }
+        
+        .centered-content ul {
+            display: inline-block;
+            text-align: left;
+            margin: 0 auto;
+            margin-top: 2rem;
+        }
+        
+        .centered-content li {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -44,7 +73,7 @@
             <li class="separator"></li>
 
             <li>
-                <a href="/methodologie" class="active"title="Sources et hypothèses">
+                <a href="/methodologie" class="active" title="Sources et hypothèses">
                     Méthodologie
                 </a>
             </li>
@@ -53,7 +82,21 @@
 
     <!-- Contenu -->
     <div class="container">
-        <h1>Methodologie<h1>
+        <div class="centered-content">
+            <h1>Méthodologie</h1>
+            
+            <section class="content-section">
+                <h2>Technologies utilisées</h2>
+                <ul>
+                    <li><strong>PostgreSQL</strong> → Base de données</li>
+                    <li><strong>SQL</strong> → Requêtes & calculs</li>
+                    <li><strong>Python</strong> → Import des données + logique</li>
+                    <li><strong>Flask</strong> → Application backend</li>
+                    <li><strong>CSV</strong> → Données sources</li>
+                    <li><strong>Plotly</strong> → Visualisation</li>
+                </ul>
+            </section>
+        </div>
     </div>
 
 </body>
